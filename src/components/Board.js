@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Cell from "./Cell";
+import Settings from "./Settings";
 
 class Board extends Component {
   constructor(props) {
@@ -8,7 +9,6 @@ class Board extends Component {
       boardSize: { x: props.x, y: props.y },
       cells: [],
     };
-    this.onCellClick = this.onCellClick.bind(this);
   }
 
   componentDidMount() {
@@ -101,71 +101,28 @@ class Board extends Component {
 
   render() {
     return (
-      <main>
-        <div id="board">
-          <label htmlFor="board">Conway's Game Of Life</label>
-          {this.state.cells.map((row, rowIndex) => (
-            <div className="row" key={rowIndex}>
-              {row.map((cell, cellIndex) => (
-                <Cell
-                  coords={{ rowIndex, cellIndex }}
-                  isAlive={cell}
-                  onClick={this.onCellClick}
-                  key={cellIndex}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-        <button onClick={() => this.nextEpoch()}>Next epoch</button>
-        <button onClick={() => this.generateBoard(() => false)}>Reset</button>
-        <button
-          onClick={() =>
-            this.generateBoard(() => Math.floor(Math.random() * 2) === 1)
-          }
-        >
-          Generate Random Board
-        </button>
-        <br />
-        <br />
-        <label htmlFor="horizontal-size-slider">
-          Horizontal Size: {this.state.boardSize.x}
-        </label>
-        <input
-          type="range"
-          min="3"
-          max="50"
-          value={this.state.boardSize.x}
-          onChange={(e) =>
-            this.setState({
-              boardSize: {
-                x: e.target.value,
-                y: this.state.boardSize.y,
-              },
-            })
-          }
-          id="vertical-size-slider"
+      <div id="board">
+        <label htmlFor="board">Conway's Game Of Life</label>
+        {this.state.cells.map((row, rowIndex) => (
+          <div className="row" key={rowIndex}>
+            {row.map((cell, cellIndex) => (
+              <Cell
+                coords={{ rowIndex, cellIndex }}
+                isAlive={cell}
+                onClick={this.onCellClick.bind(this)}
+                key={cellIndex}
+              />
+            ))}
+          </div>
+        ))}
+        <Settings
+          createBoard={this.createBoard.bind(this)}
+          generateBoard={this.generateBoard.bind(this)}
+          nextEpoch={this.nextEpoch.bind(this)}
+          boardSize={this.state.boardSize}
+          setState={this.setState.bind(this)}
         />
-        <label htmlFor="vertical-size-slider">
-          Vertical Size: {this.state.boardSize.y}
-        </label>
-        <input
-          type="range"
-          min="3"
-          max="50"
-          value={this.state.boardSize.y}
-          onChange={(e) =>
-            this.setState({
-              boardSize: {
-                x: this.state.boardSize.x,
-                y: e.target.value,
-              },
-            })
-          }
-          id="vertical-size-slider"
-        />
-        <button onClick={() => this.createBoard()}>Apply Size</button>
-      </main>
+      </div>
     );
   }
 }
