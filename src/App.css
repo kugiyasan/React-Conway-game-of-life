@@ -13,6 +13,14 @@ html {
   color: white;
 }
 
+main {
+  text-align: center;
+}
+
+#board-wrapper {
+  display: inline-block;
+}
+
 .row {
   display: flex;
   flex-direction: row;
@@ -35,4 +43,9 @@ html {
 
 input {
   width: 100%;
+}
+
+.settings {
+  display: inline-block;
+  width: 80%;
 }

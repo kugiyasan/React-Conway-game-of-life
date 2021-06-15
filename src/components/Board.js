@@ -8,6 +8,8 @@ class Board extends Component {
     this.state = {
       boardSize: { x: props.x, y: props.y },
       cells: [],
+      epochInterval: 200,
+      automode: false,
     };
   }
 
@@ -44,13 +46,27 @@ class Board extends Component {
     this.setState(cells);
   }
 
+  autoNextEpoch() {
+    if (this.state.automode === false) {
+      var interval = setInterval(
+        () => this.nextEpoch(),
+        this.state.epochInterval
+      );
+      this.setState({ interval, automode: true });
+    } else {
+      clearInterval(this.state.interval);
+      this.setState({ automode: false });
+    }
+  }
+
   nextEpoch() {
     var { cells } = this.state;
     var newCells = [];
 
-    cells.map((row) => {
+    //deep copy the cells array
+    for (const row of cells) {
       newCells.push([...row]);
-    });
+    }
 
     for (var y = 0; y < cells.length; y++) {
       for (var x = 0; x < cells[y].length; x++) {
@@ -83,12 +99,12 @@ class Board extends Component {
       { x: x + 1, y: y + 1 },
     ];
 
-    coords.map(({ x, y }) => {
+    for (const { x, y } of coords) {
       if (y < 0 || x < 0 || y >= cells.length || x >= cells[y].length) {
       } else if (cells[y][x] === true) {
         count++;
       }
-    });
+    }
 
     return count;
   }
@@ -101,28 +117,34 @@ class Board extends Component {
 
   render() {
     return (
-      <div id="board">
-        <label htmlFor="board">Conway's Game Of Life</label>
-        {this.state.cells.map((row, rowIndex) => (
-          <div className="row" key={rowIndex}>
-            {row.map((cell, cellIndex) => (
-              <Cell
-                coords={{ rowIndex, cellIndex }}
-                isAlive={cell}
-                onClick={this.onCellClick.bind(this)}
-                key={cellIndex}
-              />
+      <main>
+        <div id="board-wrapper">
+          <div id="board">
+            <label htmlFor="board">Conway's Game Of Life</label>
+            {this.state.cells.map((row, rowIndex) => (
+              <div className="row" key={rowIndex}>
+                {row.map((cell, cellIndex) => (
+                  <Cell
+                    coords={{ rowIndex, cellIndex }}
+                    isAlive={cell}
+                    onClick={this.onCellClick.bind(this)}
+                    key={cellIndex}
+                  />
+                ))}
+              </div>
             ))}
           </div>
-        ))}
+        </div>
         <Settings
           createBoard={this.createBoard.bind(this)}
           generateBoard={this.generateBoard.bind(this)}
           nextEpoch={this.nextEpoch.bind(this)}
           boardSize={this.state.boardSize}
           setState={this.setState.bind(this)}
+          autoNextEpoch={this.autoNextEpoch.bind(this)}
+          epochInterval={this.state.epochInterval}
         />
-      </div>
+      </main>
     );
   }
 }

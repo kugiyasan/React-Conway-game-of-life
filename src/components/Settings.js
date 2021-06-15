@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 const Settings = (props) => {
   return (
@@ -51,6 +51,26 @@ const Settings = (props) => {
         id="vertical-size-slider"
       />
       <button onClick={() => props.createBoard()}>Apply Size</button>
+      <br />
+      <br />
+      <label htmlFor="vertical-size-slider">
+        Auto Next Epoch Interval: {props.epochInterval}ms
+      </label>
+      <input
+        type="range"
+        min="20"
+        max="1000"
+        value={props.epochInterval}
+        onChange={(e) =>
+          props.setState({
+            epochInterval: e.target.value,
+          })
+        }
+        id="auto-next-epoch-slider"
+      />
+      <button onClick={() => props.autoNextEpoch()}>
+        Toggle Auto Next Epoch
+      </button>
     </div>
   );
 };

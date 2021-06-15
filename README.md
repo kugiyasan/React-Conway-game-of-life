@@ -1,3 +1,18 @@
+# Conway's game of life
+An old project I did back in August 2020, a conway's game of life in React. 
+
+## Build
+You can build and serve with the following commands
+```sh
+npm build
+cd build
+
+python3 -m http.server
+# OR
+serve # Install beforehand with `npm i -g serve`
+```
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
